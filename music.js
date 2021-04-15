@@ -16,6 +16,7 @@ function addSongFromField(event) {
   if (info) { //if valid keyword was provided
 
     $('#getPlaylistBtn').removeAttr('disabled','')
+    $('.initial').remove();
 
     const infoCheck = info.toLowerCase(); 
     //doubles musicInfo to check if this keyword was already in list (considering register)
@@ -55,10 +56,15 @@ function renderList() {
 }
 
 $('#getPlaylistBtn').click(function (event) {
+
+  trackList.clear();
+  positions = [];
   help = 0;
+
   makeForm(musicInfo);
   $playList.empty();
-  $playList.append('<div>Loading Playlist!</div>')
+  $('.waiting').append('<div class="fs-4">Loading Playlist!</div>')
+  $('.waiting').append('<div class="spinner-border mt-1" role="status"> <span class="visually-hidden">Loading...</span></div>')
   
   new Promise(function(resolve) {
 
@@ -150,7 +156,7 @@ function addByGenre(genres) {
       else return -1;
     });
 
-    $playList.empty();
+    $('.waiting').empty();
     for (let item of positions) {
       //inserting singles on page
       let arr = item.split('###');
@@ -177,14 +183,17 @@ $('.info').click(function(event) {
     $(event.target).parent().remove();
 
     let keyword = $(event.target).parent().text();
-    
+
     let index = musicInfo.indexOf(keyword);
     musicInfo.splice(index,1);
     let indexCheck = musicInfoCheck.indexOf(keyword.toLowerCase());
     musicInfoCheck.splice(indexCheck,1);
 
-    if (musicInfo.length == 0) $('#getPlaylistBtn').attr('disabled','')
-    }
+    if (musicInfo.length == 0) {
+      $('#getPlaylistBtn').attr('disabled','');
+      $('.interests').append('<p class ="initial">There is nothing here yet. Add some keywords to start a search!</p>');
+    } 
+  }
 })
 
 
